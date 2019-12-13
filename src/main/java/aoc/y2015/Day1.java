@@ -1,12 +1,10 @@
 package aoc.y2015;
 
-import java.io.IOException;
-
 import aoc.Input;
 
 public class Day1 {
-    public static void main(String[] args) throws IOException {
-        String input = Input.input();
+    public static void main(String[] args) {
+        String input = "";
         int result = processInput(input);
 
         System.out.println(result);
