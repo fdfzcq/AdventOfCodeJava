@@ -4,7 +4,7 @@ import aoc.Input;
 
 public class Day2 {
     public static void main(String args[]) {
-        String input = Input.inputFromFile(2);
+        String input = Input.inputFromFile(2015, 2);
         Present[] presents = parse_input_to_presents(input);
         int part1Res = part_2_result(presents);
         System.out.println(part1Res);
