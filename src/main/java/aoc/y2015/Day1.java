@@ -4,7 +4,7 @@ import aoc.Input;
 
 public class Day1 {
     public static void main(String[] args) {
-        String input = "";
+        final String input = Input.inputFromFile(2015, 1);
         int result = processInput(input);
 
         System.out.println(result);
