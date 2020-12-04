@@ -6,7 +6,7 @@ public class Day3 {
     public static void main(String[] args) {
         final String input = Input.inputFromFile(2020, 3);
         //part1(input.split("\n", -1));
-        part2(input.split("\n", -1));
+        part2(input.split("\n"));
     }
 
     static long part1(String[] lines, int right, int down) {
@@ -16,7 +16,7 @@ public class Day3 {
         while(lineIndex + down < lines.length) {
             char[] line2 = lines[lineIndex + down].toCharArray();
             numOfTrees = line2[(location + right) % line2.length] == '#' ? numOfTrees + 1 : numOfTrees;
-            location = location + right;
+            location += right;
             lineIndex += down;
         }
         return (long)numOfTrees;

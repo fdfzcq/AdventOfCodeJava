@@ -1,69 +1,64 @@
 package aoc.y2020;
 
+import java.util.Arrays;
+
+import com.google.common.base.CharMatcher;
+
 import aoc.Input;
 
 public class Day2 {
     public static void main(String[] args) {
         final String input = Input.inputFromFile(2020, 2);
-        part2(input.split("\n", -1));
+        long numOfValid = Arrays.asList(input.split("\n"))
+                                .stream()
+                                .map(Day2::parsePassword)
+                                .filter(p -> p.isValidPart1())
+                                .count();
+        System.out.println(numOfValid);
     }
 
-    static void part1(String[] input) {
-        int valid = 0;
-        for(String line : input) {
-            String[] instructions = line.split(":", -1);
-            String instruction = instructions[0];
-            String passwd = instructions[1];
+    static Password parsePassword(String line) {
+        String[] instructions = line.split(":");
+        String instruction = instructions[0];
+        String passwd = instructions[1];
 
-            String[] inst = instruction.split(" ", 2);
-            String range = inst[0];
-            char letter = inst[1].charAt(0);
+        String[] inst = instruction.split(" ");
+        String range = inst[0];
+        char letter = inst[1].charAt(0);
 
-            String[] rangeNums = range.split("-", 2);
-            int lower = Integer.valueOf(rangeNums[0]);
-            int higher = Integer.valueOf(rangeNums[1]);
+        String[] rangeNums = range.split("-");
+        int lower = Integer.valueOf(rangeNums[0]);
+        int higher = Integer.valueOf(rangeNums[1]);
 
-            int letterN = 0;
-            for(char c: passwd.toCharArray()) {
-                if(c == letter){
-                    letterN++;
-                }
-            }
-            if(letterN <= higher && letterN >= lower) {
-                valid++;
-            }
-        }
-        System.out.println(valid);
+        return new Password(letter, lower, higher, passwd);
     }
 
-    static void part2(String[] input) {
-        int valid = 0;
-        for(String line : input) {
-            String[] instructions = line.split(":", -1);
-            String instruction = instructions[0];
-            char[] passwd = instructions[1].toCharArray();
+    public static class Password {
+        char character;
+        int lowerBound;
+        int higherBound;
+        String password;
 
-            String[] inst = instruction.split(" ", 2);
-            String range = inst[0];
-            char letter = inst[1].charAt(0);
-
-            String[] rangeNums = range.split("-", 2);
-            int lower = Integer.valueOf(rangeNums[0]);
-            int higher = Integer.valueOf(rangeNums[1]);
-
-            boolean lowerMatches = getValue(passwd, lower) == letter;
-            boolean higherMatches = getValue(passwd, higher) == letter;
-            if((lowerMatches && !higherMatches) || (!lowerMatches && higherMatches)) {
-                valid++;
-            }
+        Password(char c, int lower, int higher, String passwd) {
+            this.character = c;
+            this.lowerBound = lower;
+            this.higherBound = higher;
+            this.password = passwd;
         }
-        System.out.println(valid);
-    }
 
-    static int getValue(char[] passwd, int i) {
-        if(i < passwd.length){
-            return passwd[i];
+        boolean isValidPart1() {
+            int numOfChar = CharMatcher.is(this.character).countIn(this.password);
+            return numOfChar <= this.higherBound && numOfChar >= this.lowerBound;
         }
-        return -1;
+
+        boolean isValidPart2() {
+            boolean lowerMatches = getValue(this.password, this.lowerBound) == this.character;
+            boolean higherMatches = getValue(this.password, this.higherBound) == this.character;
+            return lowerMatches ^ higherMatches;
+        }
+
+        private int getValue(String passwd, int index) {
+            return index < passwd.length() ? passwd.charAt(index) : -1;
+        }
     }
 }

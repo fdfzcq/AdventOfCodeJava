@@ -1,50 +1,54 @@
 package aoc.y2020;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import aoc.Input;
 
 public class Day1 {
+    final int sum = 2020;
     public static void main(String[] args) {
         final String input = Input.inputFromFile(2020, 1);
-        List<Integer> numbers = Arrays.asList(input.split("\n", -1))
-                                      .stream()
-                                      .map(Integer::valueOf)
-                                      .collect(Collectors.toList());
-        Collections.sort(numbers);
+        int[] numbers = Arrays.asList(input.split("\n"))
+                              .stream()
+                              .map(Integer::valueOf)
+                              .mapToInt(i->i)
+                             .toArray();
+        Arrays.sort(numbers);;
         part2(numbers);
     }
 
-    static void part1(List<Integer> numbers) {
-        for(int n: numbers) {
-            int m = 2020 - n;
-            int mIndex = Collections.binarySearch(numbers, m);
-            if(mIndex >= 0) {
-                m = numbers.get(mIndex);
-                System.out.println(m * n);
-                System.exit(0);
-            }
+    static void part1(int[] entries) {
+        System.out.println(calcEntries(2, entries, 2020, 0));
+    }
+
+    static void part2(int[] entries) {
+        System.out.println(calcEntries(3, entries, 2020, 0));
+    }
+
+    /**
+    * Function to get products of given number of entries that sum up to a given value.
+    * @param numOfEntries the number of entries left to be found.
+    * @param entries array of given entries to search from.
+    * @param sum the sum of entry set.
+    * @param startIndex the current start index of search, indexes smaller than this value have already been searched.
+    * @return the final product of entry set if entries were found, or 0 if no entry set meeting the criteria are found.
+    */
+    static int calcEntries(int numOfEntries, int[] entries, int sum, int startIndex) {
+        if(numOfEntries < 1 || startIndex == entries.length || entries[startIndex] > sum){
+            return 0;
+        }
+        if(numOfEntries == 1 && hasEntry(entries, sum, startIndex)){
+            return sum;
+        }
+        int restProduct = calcEntries(numOfEntries - 1, entries, sum - entries[startIndex], startIndex + 1);
+        if(restProduct != 0){
+            return restProduct * entries[startIndex];
+        } else {
+            return calcEntries(numOfEntries, entries, sum, startIndex + 1);
         }
     }
 
-    static void part2(List<Integer> numbers) {
-        for(int i = 0; i < numbers.size(); i ++) {
-            int n = numbers.get(i);
-            int twoSum = 2020 - n;
-            for(int j = 0; numbers.get(j) <= twoSum; j ++) {
-                if (j != i) {
-                    int m = numbers.get(j);
-                    int t = 2020 - n - m;
-                    int tIndex = Collections.binarySearch(numbers, t);
-                    if (tIndex >= 0) {
-                        System.out.println(m * n * t);
-                        System.exit(0);
-                    }
-                }
-            }
-        }
+    static boolean hasEntry(int[] entries, int sum, int startIndex) {
+        return Arrays.binarySearch(entries, startIndex, entries.length - 1, sum) > 0;
     }
 }
