@@ -12,7 +12,7 @@ public class Day2 {
         long numOfValid = Arrays.asList(input.split("\n"))
                                 .stream()
                                 .map(Day2::parsePassword)
-                                .filter(p -> p.isValidPart1())
+                                .filter(p -> p.isValidPart2())
                                 .count();
         System.out.println(numOfValid);
     }

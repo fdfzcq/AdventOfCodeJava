@@ -109,7 +109,6 @@ public class Day4 {
         }
 
         boolean isValid() {
-            System.out.println("hgt: " + this.validHGT() + " hcl: " + this.validHCL() + " ecl: " + this.validECL());
             return this.validBYR() && this.validIYR() && this.validEYR() &&
                 this.validHGT() && this.validHCL() &&
                 this.validECL() && this.validPID();
