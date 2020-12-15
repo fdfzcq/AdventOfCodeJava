@@ -33,7 +33,7 @@ public class Day4 {
             }
             if(isValid) {
                 Passport pass = new Passport();
-                for(String keyValue : line.split("\s|\n")) {
+                for(String keyValue : line.split("\\s|\\n")) {
                     String[] keyNValue = keyValue.split(":");
                     String key = keyNValue[0];
                     String value = keyNValue[1];
