@@ -2,8 +2,6 @@ package aoc.y2020;
 
 import java.util.HashMap;
 
-import aoc.Input;
-
 public class Day23 {
     public static void main(String[] args) {
         //final String input = Input.inputFromFile(2020, 23);
